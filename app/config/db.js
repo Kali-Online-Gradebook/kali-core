@@ -1,3 +1,8 @@
+console.log(process.env.DB_HOSTNAME);
+console.log(process.env.DB_USERNAME);
+console.log(process.env.DB_PASSWORD);
+console.log(process.env.DB_DATABASE);
+
 var knex = require('knex')({
 	client: 'postgres',
 	connection: {

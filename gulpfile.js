@@ -68,6 +68,20 @@ gulp.task('migrate:rollback', function () {
 		});
 });
 
+gulp.task('seed:run', function () {
+	process.chdir(path.join(process.cwd(), paths.persistence));
+
+	return knex.seed.run({})
+		.then(function (version) {
+			console.log("Seeded database.");
+			knex.destroy();
+		})
+		.catch(function (err) {
+			console.error(err);
+			knex.destroy();
+		});
+});
+
 gulp.task('test', function () {
 	return gulp.src(paths.unittests)
 		.pipe(mocha({ reporter: 'spec' }));
