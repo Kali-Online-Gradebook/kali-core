@@ -1,18 +1,18 @@
 var fs = require('fs');
 var path = require('path');
-var basename = path.basename(module.filename);
-var db = {};
+var dir = require('node-dir');
 var modelpath = path.join(__dirname, 'app/models');
+var db = {};
 
-fs
-	.readdirSync(modelpath)
-	.filter(function(file) {
-		return (file.indexOf('.') !== 0) 
-			&& (file !== basename)
-			&& (file.split('.').pop() === 'js');
-	})
-	.forEach(function(file) {
-		db[file.split('.')[0]] = require(path.join(modelpath, file));
+dir.files(modelpath, function (err, files) {
+	if (err) {
+		console.error(err.stack);
+		throw err;
+	}
+
+	files.forEach(function (file) {
+		db[path.basename(file).split('.')[0]] = require(file);
 	});
+});
 
 module.exports = db;
