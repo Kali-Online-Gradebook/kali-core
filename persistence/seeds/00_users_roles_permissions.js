@@ -2,7 +2,7 @@ var uuid = require('node-uuid');
 var bcrypt = require('bcrypt');
 
 exports.seed = function(knex, Promise) {
-	Promise.all([
+	return Promise.all([
 		knex('security.roles').del(),
 		knex('security.users').del(),
 		knex.raw("SELECT setval('security.roles_id_seq', 1)"),
@@ -41,8 +41,8 @@ exports.seed = function(knex, Promise) {
 							}).into('security.users')
 						]);
 					})
-					.then(function () {
-						return trx.raw("SELECT setval('security.users_id_seq', 3)");
+					.then(function (results) {
+						return trx.raw("SELECT setval('security.users_id_seq', " + (results.length + 1) + ")");
 					});
 			});
 		});
